@@ -265,9 +265,7 @@ def main():
     def show(year):
         new_sheet = [item for title in zip(columns, rent_sheet[year - 1]) for item in title]
         try:
-            print('████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████')
-            print(new_sheet)
-            print('████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████')
+            print(f'{"⧓" * 100}\n{new_sheet}\n{"⧓" * 100}')
         finally:
             pass
     #Taking the user input for the year they want to view, and calling the show function with the year as the first argument.
@@ -311,8 +309,10 @@ def main():
             base_rent_total += i[5]
             gross_rent_total += i[8]
 
+        print(f'{"◚" * 100}')
         print(f'\nThe total base rent paid by the tenant is estimated to be ${round(base_rent_total, 2)}\n')
         print(f'The total gross rent paid by the tenant is estimated to be ${round(gross_rent_total, 2)}\n')
+        print(f'{"◛" * 100}')
         input('Press enter to continue...')
         try:
             main_menu()
@@ -378,13 +378,13 @@ def main():
             else:
                 recoup_time += (concessions_count / current_annual_rent)
                 break
-        print('▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
+        print(f'{"◚" * 100}')
         print(f'\nTotal GUARANTY amount provided from the TENANT: ${round(total_guaranty, 2)}\n')
         print(f'Total SECURITY DEPOSIT amount provided from the TENANT: ${round(total_deposit, 2)}\n')
         print(f'Total RENT ABATEMENT amount provided from the LANDLORD: ${round(total_free_rent, 2)}\n')
         print(f'Total TENANT ALLOWANCE amount provided from the LANDLORD: ${round(ti * space_sf, 2)}\n')
         print(f'Total CONCESSIONS amount provided from the LANDLORD: ${round((ti * space_sf) + total_free_rent, 2)}\n')
-        print('▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
+        print(f'{"◛" * 100}')
         print(f'\nEstimate time for landlord to recoup concessions from base rent paid: {round(recoup_time, 2)} years ({round(recoup_time * 12, 2)} months)\n')
         input('Press enter to continue...')
         try:
@@ -423,7 +423,7 @@ def main():
         #Function that returns the compiled data into a table.
         def display_table():
             print('Creating the rent calculation table...\n')
-            print('▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
+            print('▄' * 200)
             print(columns)
             for i in rent_sheet:
                 #formatting the table to align the columns for easier readability.
@@ -431,7 +431,7 @@ def main():
                     print(f'{i[0]:7}     {i[1]:10}     {i[2]:12}     {i[3]:14}     {i[4]:17}     {i[5]:10}     {i[6]:7}     {i[7]:13}     {i[8]:13}     {i[9]:13}     {i[10]:20}')
                 except:
                     print(f'{i[0]:7}     {i[1]:10}     {i[2]:12}     {i[3]:14}     {i[4]:17}     {i[5]:10}     {i[6]:7}     {i[7]:13}     {i[8]:13}')
-            print('▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
+            print('▄' * 200)
             print('\nRent calculation table generated!\n')
             print('Disclaimer: Please note that this table is an estimate of the initial lease term and not to be relied upon. Please review the terms in your lease.\n')
             
