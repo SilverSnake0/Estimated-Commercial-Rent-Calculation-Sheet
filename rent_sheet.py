@@ -214,7 +214,7 @@ def main():
     #Function to calculate the total rent paid after twelve months and adding to column.
     def calc_gross_annual_rent():
         for i in rent_sheet:
-            gross_annual_rent = i[5] + i[7]
+            gross_annual_rent = i[5] + (i[7] * 12)
             i.append(round(gross_annual_rent, 2))
 
     calc_gross_annual_rent()
@@ -284,7 +284,10 @@ def main():
         else:
             print('\nThe number you entered does not exist in the lease term.\n')
     #Function to calculate the broker commission fee up to the first 10 years of the initial term.
+    write_broker_commission = 0
+    write_company_commission = 0
     def calc_commission(fee):
+        nonlocal write_broker_commission, write_company_commission
         try:
             company_split = float(input('\nWhat is the broker commission split with the company (e.g., ".5" for 50%):\n'))
             total = 0
@@ -296,7 +299,9 @@ def main():
                 total += i[5]
                 count -= 1
         broker_commission = round(total * fee * company_split, 2)
+        write_broker_commission += broker_commission
         company_commission = round((total * fee) - broker_commission, 2)
+        write_company_commission += company_commission
         print(f'\nThe broker fee based on the total rent paid by the tenant for 10 years is estimated to be : ${round(total * fee, 2)}')
         print(f'\nCompany split is: ${company_commission}                  {100 - (company_split * 100)}% / {company_split * 100}%                  Broker split is: ${broker_commission}')
         input('\nPress enter to continue...')
@@ -322,15 +327,24 @@ def main():
         except:
             pass
     #Added function to calculate landlord concessions to Tenant and Tenant's security and guaranty for the space.
+    write_ti = 0
+    write_free_rent = 0
+    write_guaranty = 0
+    write_deposit = 0
     def calc_landlord_concessions():
+        nonlocal write_ti, write_free_rent, write_guaranty, write_deposit
         try:
             ti = int(input('[TI per SF]\nPlease enter the amount of tenant improvement allowance per square foot that landlord has provided to the tenant:'))
+            write_ti += ti
         except:
             integer_error()
         try:
             free_rent = float(input('[FREE RENT]\nPlease enter the number of months of rent abatement the landlord is providing to the tenant:'))
+            write_free_rent += free_rent
             guaranty = float(input('[GUARANTY]\nPlease enter the amount of years the tenant is guaranteeing the lease:'))
+            write_guaranty += guaranty
             security_deposit = float(input('[SECURITY DEPOSIT]\nPlease enter the amount of months the tenant is providing as a security deposit:'))
+            write_deposit += security_deposit
         except:
             float_error()
         #Variables and counters to help the functions below calculate.
@@ -511,8 +525,9 @@ def main():
             print(columns)
             create_table.display_table()
             try:
-                column = float(input('[COL]\nPlease enter the column number index you would like to modify (First index "Lease Year" starts at 0):'))
-                row = float(input('[YEAR]\nPlease enter the lease year item you would like to modify (First year index "1" is 1):'))
+                column = float(input('[COL]\nPlease enter the column number index you would like to modify (First index "Lease Year" starts at 0):\n'))
+                print(f'You\'ve selected column "{columns[int(column)]}".')
+                row = float(input(f'[YEAR]\nPlease enter the lease year row item you would like to modify underneath "{columns[int(column)]}" column (First year index "1" is 1):'))
             except:
                 float_error()
             create_table.update_item(row, column)
@@ -557,7 +572,26 @@ def main():
                                 f'{i[0]:<10} {i[1]:<10}  {i[2]:<10}     {i[3]:<10}        {i[4]:<10}   {i[5]:<10}  {i[6]:<10} {i[7]:<10}  {i[8]:<10}')
                             f.write('\n')
                     f.write('\n')
-                    f.write('Disclaimer: Please note that this table is an estimate of the initial lease term and not to be relied upon. Please review the terms in your lease.\n')
+                    write_base_rent_total = 0
+                    write_gross_rent_total = 0
+                    for i in rent_sheet:
+                        write_base_rent_total += i[5]
+                        write_gross_rent_total += i[8]
+                    f.write(f'\nThe total BASE RENT paid by the tenant is estimated to be ${round(write_base_rent_total, 2)}\n')
+                    f.write(f'The total GROSS RENT paid by the tenant is estimated to be ${round(write_gross_rent_total, 2)}\n')
+                    f.write('\n')
+                    if write_ti:
+                        f.write(f'Tenant Allowance: ${write_ti} per SF\n')
+                        f.write(f'Rent Abatement: {write_free_rent} months\n')
+                        f.write(f'Lease Guaranty: {write_guaranty} years\n')
+                        f.write(f'Security Deposit (Months): {write_deposit}\n')
+                    f.write('\n')
+                    if write_broker_commission:
+                        total_commission = write_broker_commission + write_company_commission
+                        f.write(f'Total Commission Paid to Brokerage: ${round(total_commission, 2)}\n')
+                        f.write(f'Agent Commission ({round(100 * (write_broker_commission / total_commission), 2)}%): ${write_broker_commission}\n')
+                        f.write(f'Company Split ({round(100 * (write_company_commission / total_commission), 2)}%): ${write_company_commission}\n')
+                    f.write('\nDisclaimer: Please note that this table is an estimate of the initial lease term and not to be relied upon. Please review the terms in your lease.\n')
                     # Write the results to the file
                     f.write('\n')
                     input(
