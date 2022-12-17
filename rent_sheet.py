@@ -139,8 +139,11 @@ def main():
     def rent_esc():
         try:
             current_esc = 1 + rent_sheet[0][3]
-            current_rent_psf = rent_sheet[0][1] * current_esc
             count = 1
+            if count != 1:
+                current_rent_psf = rent_sheet[0][1] * current_esc
+            else:
+                current_rent_psf = rent_sheet[0][1]
             for i in rent_sheet:
                 if count == 1:
                     count -= 1
@@ -422,19 +425,26 @@ def main():
             input('Press enter to continue...')
         #Function that returns the compiled data into a table.
         def display_table():
+            nonlocal columns
             print('Creating the rent calculation table...\n')
             print('▄' * 200)
-            print(columns)
+            # Try and except added to check if the percentage rent "columns[9]" and percentage breakpoint "{columns[10]" apply to the rent sheet, if not then those column titles will not be displayed.
+            try:
+                print(
+                    f'{"Lease Year":<7}  {"Rent Per SF":<12} {"Square Footage":<15} {"Annual Escalation":<17} {"Monthly Rent":<20} {"Annual Rent":<12} {"NNN Per SF":<10} {"Monthly NNN":<15} {"Gross Annual Rent":<15} {columns[9]:<15} {columns[10]:<22}')
+            except:
+                print(f'{"Lease Year":<7}  {"Rent Per SF":<12} {"Square Footage":<15} {"Annual Escalation":<17} {"Monthly Rent":<20} {"Annual Rent":<12} {"NNN Per SF":<10} {"Monthly NNN":<15} {"Gross Annual Rent":<15}')
             for i in rent_sheet:
-                #formatting the table to align the columns for easier readability.
+                # formatting the table to align the columns for easier readability.
                 try:
-                    print(f'{i[0]:7}     {i[1]:10}     {i[2]:12}     {i[3]:14}     {i[4]:17}     {i[5]:10}     {i[6]:7}     {i[7]:13}     {i[8]:13}     {i[9]:13}     {i[10]:20}')
+                    print(f'{i[0]:<7}     {i[1]:<12} {i[2]:<15} {i[3]:<17} {i[4]:<20} {i[5]:<12} {i[6]:<10} {i[7]:<15} {i[8]:<15}   {i[9]:<15} {i[10]:<22}')
                 except:
-                    print(f'{i[0]:7}     {i[1]:10}     {i[2]:12}     {i[3]:14}     {i[4]:17}     {i[5]:10}     {i[6]:7}     {i[7]:13}     {i[8]:13}')
+                    print(
+                        f'{i[0]:<7}     {i[1]:<12} {i[2]:<15} {i[3]:<17} {i[4]:<20} {i[5]:<12} {i[6]:<10} {i[7]:<15} {i[8]:<15}')
             print('▄' * 200)
             print('\nRent calculation table generated!\n')
             print('Disclaimer: Please note that this table is an estimate of the initial lease term and not to be relied upon. Please review the terms in your lease.\n')
-            
+
         display_table()
             
     code_all = input('Press enter to continue.')
@@ -467,7 +477,8 @@ def main():
         print('▌                                                                                                                                  ▌')
         print('▌1. Show Entire Rent Sheet Table              2. Show Info from a Specific Lease Year               3. Calculate Broker Commission ▌')
         print('▌4. Create a New Table                        5. Get Total Rent Paid By Tenant                      6. Landlord Concessions Calc   ▌')
-        print('▌7. Update Specific Item Data                 8. Update Column Data                                 9. Exit                        ▌')
+        print('▌7. Update Specific Item Data                 8. Update Column Data                                 9. Save Rent Sheet Table       ▌')
+        print('▌10.Exit                                                                                                                           ▌')
         print('▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄')
         try:
             menu_answer = int(input('Please enter a number:\n'))
@@ -518,6 +529,41 @@ def main():
             create_table.display_table()
             main_menu()
         elif menu_answer == 9:
+            # This code below adds the ability to save the estimated rent calculation sheet to a text file.
+            save_file_question = input(
+                f'\n(Type "yes" or "no")\nWould you like to save the estimated rent sheet table to your computer?\n')
+            if save_file_question.lower() in ('yes', 'y'):
+                # Request the user to name the file
+                name_file = input(f'What would you like to name the file as?')
+                # Open a file to store the user's rent sheet table
+                with open(f'{name_file}.txt', 'a') as f:
+                    f.write('Estimated Rent Calculation Table:')
+                    f.write('\n')
+                    f.write('\n')
+                    try:
+                        f.write(
+                            f'{columns[0]:<10} {columns[1]:<10} {columns[2]:<10} {columns[3]:<10} {columns[4]:<10} {columns[5]:<10} {columns[6]:<10} {columns[7]:<10} {columns[8]:<10} {columns[9]:<10} {columns[10]:<10}')
+                    except:
+                        f.write(
+                            f'{columns[0]:<10} {columns[1]:<10} {columns[2]:<10} {columns[3]:<10} {columns[4]:<10} {columns[5]:<10} {columns[6]:<10} {columns[7]:<10} {columns[8]:<10}')
+                    f.write('\n')
+                    for i in rent_sheet:
+                        try:
+                            f.write(
+                                f'{i[0]:<10} {i[1]:<10}  {i[2]:<10}     {i[3]:<10}        {i[4]:<10}   {i[5]:<10}  {i[6]:<10} {i[7]:<10}  {i[8]:<10}        {i[9]:<10}      {i[10]:<10}')
+                            f.write('\n')
+                        except:
+                            f.write(
+                                f'{i[0]:<10} {i[1]:<10}  {i[2]:<10}     {i[3]:<10}        {i[4]:<10}   {i[5]:<10}  {i[6]:<10} {i[7]:<10}  {i[8]:<10}')
+                            f.write('\n')
+                    f.write('\n')
+                    f.write('Disclaimer: Please note that this table is an estimate of the initial lease term and not to be relied upon. Please review the terms in your lease.\n')
+                    # Write the results to the file
+                    f.write('\n')
+                    input(
+                        f'\n(You can locate the file in your current folder directory where this program is saved)\nYour estimated rent sheet table have been saved as "{name_file}.txt"!\n')
+            main_menu()
+        elif menu_answer == 10:
             print('\nYou have successfully exited the program.')
             try:
                 exit_main()
