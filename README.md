@@ -11,7 +11,7 @@ This application is for personal use to assist commercial real estate agents, co
 - Landlord concessions calculator
 - Update a specific item in the table
 - Update column data
-- Ability to save rent sheet table to your computer as a text file
+- Save rent sheet table to your computer as a text file
 
 # Requirements
 
