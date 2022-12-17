@@ -1,6 +1,6 @@
 # Estimated Commercial Rent Calculation Sheet
 
-This application is for personal use to assist commercial real estate agents, companies, or landlords, in getting an estimate on the commercial rent structure of a lease.
+Easily calculate commercial rent estimates with this interactive application. Great way for real estate agents, companies, and landlords looking to streamline their leasing process. Features include a rent sheet table, broker commission calculation, landlord concessions calculator, and the ability to save and update rent data.
 
 # Features
 - Showing the rent sheet table
