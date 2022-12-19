@@ -1,9 +1,12 @@
+#James L. is the developer and owner of this program. James is a self taught developer and commercial real estate associate broker.
+#There are no warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information in this program, is strictly at your own risk. Thank you! @Copyright 2022
+
+# Try to import pandas to generate the excel table if the user wants to save the table as an .xlsx file
 try:
     import pandas as pd
 except:
     pass
-#James L. is the developer and owner of this program. James is a self taught developer and commercial real estate associate broker.
-#There are no warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information in this program, is strictly at your own risk. Thank you! @Copyright 2022
+
 def exit_main():
     exit()
 
@@ -556,9 +559,11 @@ def main():
                         pass
                 # Open a file to store the user's rent sheet table
                 with open(f'{name_file}.txt', 'a') as f:
+                    # Write the table results to the file
                     f.write('Estimated Rent Calculation Table:')
                     f.write('\n')
-                    f.write('+' + ('-' * 120) + '+' + '\n')
+                    f.write('+' + ('-' * 120) + '+' + '\n') # Generates a bar design above the table
+                    # The code below is for formatting of the spacing of the data to look more presentable
                     try:
                         f.write(
                             f'{columns[0]:<10} {columns[1]:<10} {columns[2]:<10} {columns[3]:<10} {columns[4]:<10} {columns[5]:<10} {columns[6]:<10} {columns[7]:<10} {columns[8]:<10} {columns[9]:<10} {columns[10]:<10}')
@@ -575,29 +580,28 @@ def main():
                             f.write(
                                 f'{i[0]:<10} ${i[1]:<10} {i[2]:<10}     {i[3]:<10}        ${i[4]:<10}  ${i[5]:<10} ${i[6]:<10}${i[7]:<9}  ${i[8]:<10}')
                             f.write('\n')
-                    f.write('+' + ('-' * 120) + '+' + '\n')
+                    f.write('+' + ('-' * 120) + '+' + '\n')# Generates a bar design below the table
                     f.write('\n')
                     write_base_rent_total = 0
                     write_gross_rent_total = 0
                     for i in rent_sheet:
-                        write_base_rent_total += i[5]
-                        write_gross_rent_total += i[8]
-                    f.write(f'\nThe total BASE RENT paid by the tenant is estimated to be ${round(write_base_rent_total, 2)}\n')
-                    f.write(f'The total GROSS RENT paid by the tenant is estimated to be ${round(write_gross_rent_total, 2)}\n')
+                        write_base_rent_total += i[5] # Adds all the base rent the tenant paid in column 6 over the lease term
+                        write_gross_rent_total += i[8] # Adds all the gross rent (includes triple net expenses) the tenant paid in column 9 over the lease term
+                    f.write(f'\nThe total BASE RENT paid by the tenant is estimated to be ${round(write_base_rent_total, 2)}\n') # Prints out total and rounds it
+                    f.write(f'The total GROSS RENT paid by the tenant is estimated to be ${round(write_gross_rent_total, 2)}\n') # Prints out total and rounds it
                     f.write('\n')
-                    if write_ti:
+                    if write_ti: # If the user entered a Tenant improvement alowance amount previously, then the code below will be added to the text file
                         f.write(f'Tenant Allowance: ${write_ti} per SF\n')
                         f.write(f'Rent Abatement: {write_free_rent} months\n')
                         f.write(f'Lease Guaranty: {write_guaranty} years\n')
                         f.write(f'Security Deposit (Months): {write_deposit}\n')
                     f.write('\n')
-                    if write_broker_commission:
+                    if write_broker_commission: # If the user entered a broker commission amount previously, then the code below will be added to the text file
                         total_commission = write_broker_commission + write_company_commission
                         f.write(f'Total Commission Paid to Brokerage: ${round(total_commission, 2)}\n')
                         f.write(f'Agent Commission ({round(100 * (write_broker_commission / total_commission), 2)}%): ${write_broker_commission}\n')
                         f.write(f'Company Split ({round(100 * (write_company_commission / total_commission), 2)}%): ${write_company_commission}\n')
                     f.write('\nDisclaimer: Please note that this table is an estimate of the initial lease term and not to be relied upon. Please review the terms in your lease.\n')
-                    # Write the results to the file
                     f.write('\n')
                     input(
                         f'\n(You can locate the file in your current folder directory where this program is saved)\nYour estimated rent sheet table have been saved as "{name_file}.txt"!\n')
