@@ -1,3 +1,7 @@
+try:
+    import pandas as pd
+except:
+    pass
 #James L. is the developer and owner of this program. James is a self taught developer and commercial real estate associate broker.
 #There are no warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information in this program, is strictly at your own risk. Thank you! @Copyright 2022
 def exit_main():
@@ -137,22 +141,12 @@ def main():
         add_annual_escalation(num, rentlock)
     #Adjusting the rent per sf to account for the rent escalation.
     def rent_esc():
-        try:
-            current_esc = 1 + rent_sheet[0][3]
-            count = 1
-            if count != 1:
-                current_rent_psf = rent_sheet[0][1] * current_esc
-            else:
-                current_rent_psf = rent_sheet[0][1]
-            for i in rent_sheet:
-                if count == 1:
-                    count -= 1
-                    continue
-                current_esc = 1 + i[3]
-                current_rent_psf = current_rent_psf * current_esc
-                i[1] = round((current_rent_psf), 2)
-        except:
-            main()
+        rent_sheet[0][3] = 0
+        current_rent_psf = rent_sheet[0][1]
+        for i in rent_sheet[1:]:
+            current_esc = 1 + i[3]
+            current_rent_psf *= current_esc
+            i[1] = round(current_rent_psf, 2)
     
     rent_esc()
     #Generating the annual rent and monthly rent inside the rent sheet.
@@ -546,15 +540,25 @@ def main():
         elif menu_answer == 9:
             # This code below adds the ability to save the estimated rent calculation sheet to a text file.
             save_file_question = input(
-                f'\n(Type "yes" or "no")\nWould you like to save the estimated rent sheet table to your computer?\n')
+                f'\n(Type "yes" to save in both text and excel, "y" for only text, or "no" for none)\nWould you like to save the estimated rent sheet table to your computer?\n')
             if save_file_question.lower() in ('yes', 'y'):
                 # Request the user to name the file
                 name_file = input(f'What would you like to name the file as?')
+                if save_file_question.lower() == 'yes':
+                    # Convert the rent_sheet list to a DataFrame
+                    try:
+                        df = pd.DataFrame(rent_sheet, columns=columns)
+                        # Save the DataFrame to an Excel file
+                        df.to_excel(f'{name_file}.xlsx', index=False)
+                        print('Successfully saved the table in excel!')
+                    except:
+                        print(f'You do not have the pandas module installed in order to save the excel file.')
+                        pass
                 # Open a file to store the user's rent sheet table
                 with open(f'{name_file}.txt', 'a') as f:
                     f.write('Estimated Rent Calculation Table:')
                     f.write('\n')
-                    f.write('\n')
+                    f.write('+' + ('-' * 120) + '+' + '\n')
                     try:
                         f.write(
                             f'{columns[0]:<10} {columns[1]:<10} {columns[2]:<10} {columns[3]:<10} {columns[4]:<10} {columns[5]:<10} {columns[6]:<10} {columns[7]:<10} {columns[8]:<10} {columns[9]:<10} {columns[10]:<10}')
@@ -565,12 +569,13 @@ def main():
                     for i in rent_sheet:
                         try:
                             f.write(
-                                f'{i[0]:<10} {i[1]:<10}  {i[2]:<10}     {i[3]:<10}        {i[4]:<10}   {i[5]:<10}  {i[6]:<10} {i[7]:<10}  {i[8]:<10}        {i[9]:<10}      {i[10]:<10}')
+                                f'{i[0]:<10} ${i[1]:<10} {i[2]:<10}     {i[3]:<10}        ${i[4]:<10}  ${i[5]:<10} ${i[6]:<10}${i[7]:<9}  ${i[8]:<10}       {i[9]:<10}      ${i[10]:<10}')
                             f.write('\n')
                         except:
                             f.write(
-                                f'{i[0]:<10} {i[1]:<10}  {i[2]:<10}     {i[3]:<10}        {i[4]:<10}   {i[5]:<10}  {i[6]:<10} {i[7]:<10}  {i[8]:<10}')
+                                f'{i[0]:<10} ${i[1]:<10} {i[2]:<10}     {i[3]:<10}        ${i[4]:<10}  ${i[5]:<10} ${i[6]:<10}${i[7]:<9}  ${i[8]:<10}')
                             f.write('\n')
+                    f.write('+' + ('-' * 120) + '+' + '\n')
                     f.write('\n')
                     write_base_rent_total = 0
                     write_gross_rent_total = 0
