@@ -30,7 +30,7 @@ cd Desktop/rent-calculator
 - Run the program by typing the following command in the terminal:
 
 ```
-python main.py
+python rent_sheet.py
 ```
 
 - Follow the prompts to input the required information and calculate the rent.
