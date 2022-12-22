@@ -89,9 +89,9 @@ def main():
             i.append(rent_psf)
     #Taking user input for the rent per square foot.
     try:
-        rent_psf = int(input('[Rent Per SF]\nPlease enter the rent amount per square foot:'))
+        rent_psf = float(input('[Rent Per SF]\nPlease enter the rent amount per square foot:'))
     except:
-        integer_error()
+        float_error()
     add_rent_psf(rent_psf)    
     #adding the square foot to the column function.
     def add_sf(sf):
