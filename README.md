@@ -36,4 +36,4 @@ python rent_sheet.py
 - Follow the prompts to input the required information and calculate the rent.
 
 # Disclaimer
-There are no warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information in this program, is strictly at your own risk. Thank you! 
+This real estate rent table program is provided as is. There are no warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information in this program, is strictly at your own risk. The developer will not be held responsible for any damages, losses, or other negative consequences resulting from the use of this program. The user assumes all risks and liabilities associated with using this program. Thank you!
