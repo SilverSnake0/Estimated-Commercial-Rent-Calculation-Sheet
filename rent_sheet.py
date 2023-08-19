@@ -15,7 +15,7 @@ def main():
     print('██     ██ ███████ ██       ██████  ██████  ███    ███ ███████  ')                                  
     print('██     ██ ██      ██      ██      ██    ██ ████  ████ ██       ')                                        
     print('██  █  ██ █████   ██      ██      ██    ██ ██ ████ ██ █████                                       Created by: James L.')                                    
-    print('██ ███ ██ ██      ██      ██      ██    ██ ██  ██  ██ ██                                              @Copyright 2022')                                   
+    print('██ ███ ██ ██      ██      ██      ██    ██ ██  ██  ██ ██                                              @Copyright 2023')                                   
     print(' ███ ███  ███████ ███████  ██████  ██████  ██      ██ ███████ ')  
     print(' _          _   _          _____     _   _           _         _    _____                             _     _    _____         _      _____ _           _  ')
     print('| |_ ___   | |_| |_ ___   |   __|___| |_|_|_____ ___| |_ ___ _| |  |     |___ _____ _____ ___ ___ ___|_|___| |  | __  |___ ___| |_   |   __| |_ ___ ___| |_')
@@ -553,9 +553,9 @@ def main():
                         df = pd.DataFrame(rent_sheet, columns=columns)
                         # Save the DataFrame to an Excel file
                         df.to_excel(f'{name_file}.xlsx', index=False)
-                        print('Successfully saved the table in excel!')
+                        print(f'Your estimated rent sheet table have been saved as "{name_file}.xlsx"!')
                     except:
-                        print(f'You do not have the pandas module installed in order to save the excel file.')
+                        print(f'You do not have the pandas or openpyxl module installed in order to save the excel file.')
                         pass
                 # Open a file to store the user's rent sheet table
                 with open(f'{name_file}.txt', 'a') as f:
@@ -590,11 +590,26 @@ def main():
                     f.write(f'\nThe total BASE RENT paid by the tenant is estimated to be ${round(write_base_rent_total, 2)}\n') # Prints out total and rounds it
                     f.write(f'The total GROSS RENT paid by the tenant is estimated to be ${round(write_gross_rent_total, 2)}\n') # Prints out total and rounds it
                     f.write('\n')
-                    if write_ti: # If the user entered a Tenant improvement alowance amount previously, then the code below will be added to the text file
-                        f.write(f'Tenant Allowance: ${write_ti} per SF\n')
-                        f.write(f'Rent Abatement: {write_free_rent} months\n')
-                        f.write(f'Lease Guaranty: {write_guaranty} years\n')
-                        f.write(f'Security Deposit (Months): {write_deposit}\n')
+                    if write_ti: # If the user entered a Tenant improvement allowance amount previously, then the code below will be added to the text file
+                        total_guaranty = 0
+                        guaranty_count = write_guaranty
+                        for i in rent_sheet:
+                                if guaranty_count >= 1:
+                                    total_guaranty += i[5]
+                                    guaranty_count -= 1
+                                elif guaranty_count < 1: # This is when the guaranty count is a number like .5
+                                    total_guaranty += (i[5] * guaranty_count)
+                                    guaranty_count = 0
+                        def month_or_months(variable):
+                            month_string = 'month  '
+                            if variable > 1:
+                                month_string = month_string.strip()
+                                month_string += 's '
+                            return month_string
+                        f.write(f'Tenant Allowance:  ${write_ti} per SF  (${write_ti * sf})\n')
+                        f.write(f'Rent Abatement:    {write_free_rent} {month_or_months(write_free_rent)} (${round(write_free_rent * rent_sheet[0][4], 2)} not including NNN)\n')
+                        f.write(f'Lease Guaranty:    {write_guaranty} year{"s" if write_guaranty > 1 else " "}   (${round(total_guaranty, 2)})\n')
+                        f.write(f'Security Deposit:  {write_deposit} {month_or_months(write_deposit)} (${round((rent_sheet[0][4] + rent_sheet[0][7]) * write_deposit, 2)} including NNN)\n')
                     f.write('\n')
                     if write_broker_commission: # If the user entered a broker commission amount previously, then the code below will be added to the text file
                         total_commission = write_broker_commission + write_company_commission
